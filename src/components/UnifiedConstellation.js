@@ -5,11 +5,11 @@ export default function UnifiedConstellation({ onRegionHover, onRegionLeave }) {
   const containerRef = useRef(null);
   const [hoveredRegion, setHoveredRegion] = useState(null);
 
-  // Global 3D tilt effect
+  // Stronger 3D tilt effect
   useEffect(() => {
     const handleMove = (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 12;
-      const y = (e.clientY / window.innerHeight - 0.5) * -12;
+      const x = (e.clientX / window.innerWidth - 0.5) * 40; // increased
+      const y = (e.clientY / window.innerHeight - 0.5) * -40;
 
       containerRef.current.style.transform =
         `rotateX(${y}deg) rotateY(${x}deg)`;
@@ -44,15 +44,15 @@ export default function UnifiedConstellation({ onRegionHover, onRegionLeave }) {
     Oceania: 10,
   };
 
-  // Invisible hit areas
-  const regions = [
-    { id: "Africa", cx: "30%", cy: "55%", r: "12%" },
-    { id: "Europe", cx: "40%", cy: "30%", r: "10%" },
-    { id: "Asia", cx: "60%", cy: "35%", r: "12%" },
-    { id: "NorthAmerica", cx: "20%", cy: "35%", r: "12%" },
-    { id: "SouthAmerica", cx: "25%", cy: "70%", r: "12%" },
-    { id: "Oceania", cx: "75%", cy: "65%", r: "12%" },
-  ];
+  // Node colors
+  const regionColors = {
+    Africa: "#ffcc66",
+    Europe: "#66ccff",
+    Asia: "#ff6699",
+    NorthAmerica: "#99ff66",
+    SouthAmerica: "#ff9966",
+    Oceania: "#cc99ff",
+  };
 
   return (
     <div
@@ -74,41 +74,49 @@ export default function UnifiedConstellation({ onRegionHover, onRegionLeave }) {
         ))}
 
         {/* Stars */}
-        {stars.map((s, i) => (
-          <circle
-            key={i}
-            cx={s.x}
-            cy={s.y}
-            r={hoveredRegion && regionStarMap[hoveredRegion] === i ? 3.5 : 2}
-            className={
-              hoveredRegion && regionStarMap[hoveredRegion] === i
-                ? "constellation-star star-highlight"
-                : "constellation-star"
-            }
-          />
-        ))}
+        {stars.map((s, i) => {
+          const isActive = hoveredRegion && regionStarMap[hoveredRegion] === i;
+          const regionForStar = Object.entries(regionStarMap).find(
+            ([_, idx]) => idx === i
+          );
+          const color = regionForStar ? regionColors[regionForStar[0]] : "#ffffffaa";
 
-        {/* Halo around the active star */}
+          return (
+            <circle
+              key={i}
+              cx={s.x}
+              cy={s.y}
+              r={isActive ? 4 : 2.5}
+              className={isActive ? "constellation-star star-highlight" : "constellation-star"}
+              style={{ fill: color }}
+            />
+          );
+        })}
+
+        {/* Halo around active star */}
         {hoveredRegion && (
           <circle
             cx={stars[regionStarMap[hoveredRegion]].x}
             cy={stars[regionStarMap[hoveredRegion]].y}
-            r="6"
+            r="7"
             className="star-halo"
+            style={{
+              transformOrigin: `${stars[regionStarMap[hoveredRegion]].x}% ${stars[regionStarMap[hoveredRegion]].y}%`
+            }}
           />
         )}
 
-        {/* Invisible hit areas */}
-        {regions.map((r) => (
+        {/* Hit areas directly on stars */}
+        {Object.entries(regionStarMap).map(([regionId, starIndex]) => (
           <circle
-            key={r.id}
-            cx={r.cx}
-            cy={r.cy}
-            r={r.r}
-            className="hover-region"
+            key={`hit-${regionId}`}
+            cx={stars[starIndex].x}
+            cy={stars[starIndex].y}
+            r="5"
+            className="star-hit"
             onPointerEnter={() => {
-              setHoveredRegion(r.id);
-              onRegionHover(r.id);
+              setHoveredRegion(regionId);
+              onRegionHover(regionId);
             }}
             onPointerLeave={() => {
               setHoveredRegion(null);
@@ -116,6 +124,7 @@ export default function UnifiedConstellation({ onRegionHover, onRegionLeave }) {
             }}
           />
         ))}
+
       </svg>
     </div>
   );
