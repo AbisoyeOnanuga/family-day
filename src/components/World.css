@@ -1,0 +1,26 @@
+.world-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  .world-svg {
+    width: 80%;
+    max-width: 700px;
+    fill: #3a3a55;
+    transition: 0.3s ease;
+  }
+  
+  .region {
+    fill: #3a3a55;
+    stroke: #ffffff22;
+    stroke-width: 2;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .region:hover {
+    fill: #6a5acd;
+    transform: scale(1.05);
+  }
+  

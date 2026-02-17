@@ -1,0 +1,33 @@
+.cluster {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+  }
+  
+  .cluster-svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .star {
+    fill: #ffffff66;
+    transition: 0.3s ease;
+  }
+  
+  .star-hover {
+    fill: #ffffff;
+    filter: drop-shadow(0 0 6px #fff);
+  }
+  
+  .line {
+    stroke: #ffffff22;
+    stroke-width: 2;
+    transition: 0.3s ease;
+  }
+  
+  .line-hover {
+    stroke: #ffffffaa;
+  }
+  
