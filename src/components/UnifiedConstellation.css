@@ -1,9 +1,17 @@
-.constellation-wrapper {
+.constellation-outer {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .constellation-wrapper {
+    width: 70vw;
+    height: 70vh;
     perspective: 1200px;
-    transition: transform 0.2s ease-out;
-    animation: idleFloat 6s ease-in-out infinite;
+    transition: transform 0.25s ease-out;
+    animation: idleFloat 7s ease-in-out infinite;
   }
   
   .constellation-wrapper:hover {
@@ -12,7 +20,7 @@
   
   @keyframes idleFloat {
     0% { transform: rotateX(0deg) rotateY(0deg); }
-    50% { transform: rotateX(5deg) rotateY(-5deg); }
+    50% { transform: rotateX(4deg) rotateY(-4deg); }
     100% { transform: rotateX(0deg) rotateY(0deg); }
   }
   
