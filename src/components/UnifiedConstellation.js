@@ -10,23 +10,22 @@ export default function UnifiedConstellation({ onRegionHover, onRegionLeave }) {
 
     const handleMove = (e) => {
       const rect = wrapper.getBoundingClientRect();
-      const inside =
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
-
-      if (!inside) {
-        wrapper.style.transform = `rotateX(0deg) rotateY(0deg)`;
-        return;
-      }
 
       const relX = (e.clientX - rect.left) / rect.width - 0.5;
       const relY = (e.clientY - rect.top) / rect.height - 0.5;
 
-      // spherical-like tilt
-      const tiltX = relY * -35; // stronger
-      const tiltY = relX * 35;
+      const distanceFromCenter = Math.sqrt(relX * relX + relY * relY);
+
+      const globalTiltStrength = 8;
+      const localTiltStrength = 25;
+
+      const tiltStrength =
+        distanceFromCenter < 0.6
+          ? localTiltStrength
+          : globalTiltStrength;
+
+      const tiltX = relY * -tiltStrength;
+      const tiltY = relX * tiltStrength;
 
       wrapper.style.transform =
         `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
